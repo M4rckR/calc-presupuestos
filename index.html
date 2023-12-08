@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="container mx-auto pt-10 bg-slate-400 gap-4">
+
+  <header class="pb-10 text-violet-900 flex flex-col items-center gap-10 ">
+    <h1 class="text-center text-4xl font-bold">Calculador de presupuestos</h1>
+    <form id="formulario1" >
+      <div class="flex gap-2">
+        <input class="outline-none py-2 px-4 rounded" type="text" placeholder="Ingrese presupuesto">
+        <button id="ingresoPresupuesto" class="bg-violet-900 text-white py-2 px-4 rounded hover:text-violet-200 hover:bg-violet-950">Ingresar</button>
+      </div >
+     
+    </form>
+  </header>
+
+  <main class=" text-violet-900 px-4 font-semibold flex flex-col gap-8 lg:flex-row">
+    <div class=" flex flex-col lg:w-1/2">
+      <form class="flex flex-col gap-2">
+        <div class="flex items-center gap-4">
+          <label class="w-2/6 text-violet-900 font-semibold">Nombre:</label>
+          <input class="w-4/6 outline-none py-2 px-4 shadow-lg border rounded" type="text">
+        </div>
+        <div class="flex items-center gap-4">
+          <label class="w-2/6 text-violet-900 font-semibold">Presupuesto:</label>
+          <input class="w-4/6 outline-none py-2 px-4 shadow-lg border rounded" type="text">
+        </div>
+      </form>
+      <input class="bg-violet-900 cursor-pointer text-white py-2 px-4 mt-2 self-end rounded hover:text-violet-200 hover:bg-violet-950" type="submit">
+    </div>
+
+    <section class="lg:w-1/2 flex flex-col justify-between">
+
+      <div>
+        <div>
+          <h2 class="text-2xl">Bitacora de gastos</h2>
+          <div class="w-full h-[2px] bg-violet-200"></div>
+        </div>
+
+        <div class="flex flex-col" id="gastos">
+          <p class="text-center py-4">Aun no se ha ingresado algun gasto</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col  gap-2 sm:flex-row" id="restantes">
+        <p class="w-full py-2 px-4 bg-violet-100 rounded sm:w-1/2 ">Presupuesto: <span id="presupuesto"></span></p>
+        <p class="w-full py-2 px-4 bg-violet-100 rounded sm:w-1/2 ">Restante: <span id="restante"></span> </p>
+      </div>
+      <button id="" id="Reiniciar" class="mt-4 bg-violet-900 py-2 px-4 rounded text-white hover:text-violet-200 hover:bg-violet-950 lg:self-end">Reiniciar</button>
+    </section>
+  
+
+
+  <script src="js/app.js"></script>
+</body>
+</html>
