@@ -6,6 +6,8 @@ const campoNombre =  document.querySelector('#campo-nombre');
 const campoGasto =  document.querySelector('#campo-gasto');
 const reiniciar =  document.querySelector('#reiniciar');
 const listaGastos =  document.querySelector('#listado-gastos');
+const formulario2 = document.querySelector('#formulario2');
+let itemsGasto = []
 
 
 eventListeners();
@@ -14,12 +16,16 @@ function eventListeners() {
     document.addEventListener('DOMContentLoaded', funcionesPorDefecto)
     btnPresupuesto.addEventListener('click', validarPresupuesto)
     agregarGasto.addEventListener('click', validarGasto)
+    reiniciar.addEventListener('click', () => {
+        ui.gastosToggle(true);
+        ui.presupuestoToggle(false);
+        ui.limpiarHtml();
+        formulario1.reset();
+        presupuesto = undefined;
+        itemsGasto = [];
+    })
 
 }
-
-
-
-
 
 // Clases
 
@@ -87,28 +93,30 @@ class Ui {
         labelRestante.textContent = restante;
     }
 
-    ingresarGasto(nombre,valor,gastos){
+    ingresarGasto(){
         this.limpiarHtml();
-        gastos.forEach(gasto => {
-            const li = document.createElement('li');
-            const cerrar = document.createElement('button');
-            cerrar.textContent = 'X';
-            cerrar.className = 'bg-red-500 text-white font-bold py-2 px-4 rounded-full';
-            cerrar.onclick = () => {
-                const index = gastos.indexOf(gasto);
-                gastos.splice(index,1);
-                this.actualizarRestante(gasto)
-                this.ingresarGasto(nombre,valor,gastos)
+        itemsGasto.forEach(gasto => {
+            const {nombre,valor,id} = gasto;
+            const itemGasto = document.createElement('div');
+            const btnCerrar = document.createElement('button');
+
+            btnCerrar.textContent = 'X'
+            btnCerrar.className = 'bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 ml-auto' 
+            btnCerrar.setAttribute('data-id',id)
+            btnCerrar.onclick = () => {
+                this.eliminarGasto(btnCerrar.getAttribute('data-id'))
+                presupuesto.actualizarRestante(-valor)
+                this.actualizarRestante(presupuesto.restante)
             }
-            listaGastos.classList.add('mt-2', 'mb-4')
-            li.className = 'flex justify-between items-center py-2 px-4 bg-gray-200 mt-2';
-            li.innerHTML = `
-            <span class="font-bold">${nombre}</span>
-            <span class="font-bold">${valor}</span>
-            `   
-            li.appendChild(cerrar)
-            listaGastos.appendChild(li)
+            itemGasto.className = 'flex items-center bg-white py-2 px-4 mb-2'
+            itemGasto.textContent = `${nombre} - $${valor}`
+
+            itemGasto.appendChild(btnCerrar)
+            listaGastos.appendChild(itemGasto)
+            formulario2.reset();
+            // console.log(itemsGasto);
         })
+        
     }
 
     limpiarHtml(){
@@ -120,10 +128,12 @@ class Ui {
     actualizarRestante(restante) {
         const labelRestante = document.querySelector('#restante')
         labelRestante.textContent = restante;
-        if(restante <= 0){
-            this.generarAlerta('El presupuesto se ha agotado','error')
-            this.gastosToggle(true);
-        }
+    }
+
+    eliminarGasto(id) {
+        //Funcion para eliminar un gasto en base al id como parametro
+        itemsGasto = itemsGasto.filter(gasto => gasto.id != id)
+        this.ingresarGasto();
     }
 }
 const ui = new Ui();
@@ -173,11 +183,18 @@ function validarGasto(e){
         return;
     }
     else {
+        const gasto = {
+            nombre: valorNombre,
+            valor: valorGasto,
+            id: Date.now()
+        }
+        itemsGasto.push(gasto)
         presupuesto.actualizarRestante(valorGasto)
         let {gastos,restante} = presupuesto;
         ui.actualizarRestante(restante)
         ui.generarAlerta('El gasto ha sido ingresado')
-        ui.ingresarGasto(valorNombre,valorGasto,gastos)
+        ui.ingresarGasto()
+
     }
 }
 
